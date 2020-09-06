@@ -1,21 +1,21 @@
+import Layout from "../components/Layout"
+
 export default class extends React.Component {
     static async getInitialProps({query}){
         let idPodcast = query.id
    
         let req = await fetch(`https://api.audioboom.com/audio_clips/${idPodcast}.mp3`)
-        let dataPodcast = await req.json()
-        let podcast = dataPodcast.body.audio_clip
-        return { podcast }
+        let clip = (await req.json()).body.audio_clip
+        return { clip }
     }
     
     render(){
-        const { podcast } = this.props
-        return <>    
-            <header>Podcast de {podcast.channel.title}</header> 
-            <h1>{ podcast.title }</h1>
-            <img src={ podcast.urls.image } alt={ podcast.title }/>
+        const { clip } = this.props
+        return <Layout title={clip.channel.title}>     
+            <h1>{ clip.title }</h1>
+            <img src={ clip.channel.urls.logo_image.original } alt={ clip.title }/>
             <audio controls>
-                <source src={ podcast.urls.high_mp3 } />
+                <source src={ clip.urls.high_mp3 } />
             </audio>
 
             <style jsx>{`
@@ -51,6 +51,6 @@ export default class extends React.Component {
                     font-family: system-ui;  
                 }
             `}</style>
-        </>
+        </Layout>
     }
 }

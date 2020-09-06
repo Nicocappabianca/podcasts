@@ -1,101 +1,65 @@
-import Link from 'next/link'
+import Layout from '../components/Layout'
+import PodcastsList from '../components/PodcastsList'
+import Error from 'next/error'
 
 export default class extends React.Component {
     
-    static async getInitialProps({query}){
+    static async getInitialProps({ query, res }){
         let idChannel = query.id
 
-        let [reqChannel, reqSeries, reqAudios] = await Promise.all([
-            fetch(`https://api.audioboom.com/channels/${idChannel}`), 
-            fetch(`https://api.audioboom.com/channels/${idChannel}/child_channels`), 
-            fetch(`https://api.audioboom.com/channels/${idChannel}/audio_clips`)
-        ])
+        try{
+            let [reqChannel, reqAudios] = await Promise.all([
+                fetch(`https://api.audioboom.com/channels/${idChannel}`), 
+                fetch(`https://api.audioboom.com/channels/${idChannel}/audio_clips`)
+            ])
 
-        let [dataChannel, dataSeries, dataAudios] = await Promise.all([
-            reqChannel.json(),
-            reqSeries.json(),  
-            reqAudios.json()
-        ])
+            if( reqChannel.status >= 400 ){
+                res.statusCode = reqChannel.status; 
+                return { channel: null, audioClips: null, statusCode: 404 }
+            }
+    
+            let [dataChannel, dataAudios] = await Promise.all([
+                reqChannel.json(),
+                reqAudios.json()
+            ])
 
-        let channel = dataChannel.body.channel
-        let audioClips = dataAudios.body.audio_clips
-        let series = dataSeries.body.channels
-
-        return { channel, audioClips, series }
+            let channel = dataChannel.body.channel
+            let audioClips = dataAudios.body.audio_clips
+    
+            return { channel, audioClips, statusCode: 200 }
+        } catch(e) {
+            res.statusCode = reqChannel.status; 
+            return { channel: null, audioClips: null, statusCode: 503 }
+        }
     }
     
     render(){
-        const { channel, audioClips, series } = this.props
+        const { channel, audioClips, statusCode } = this.props
 
-        return <>    
-            <header>Podcasts de { channel.title }</header> 
-            <h1>{ channel.title }</h1>
-            <img src={ channel.urls.logo_image.original } alt=""/>
-            <h2>Últimos podcasts</h2>
-            { audioClips.map((clip) => (
-                <Link href={`/podcast?id=${clip.id}`} key={clip.id}>
-                    <div className="list-item">{ clip.title }<span>▶️</span></div>
-                </Link>
-            )) }
-            
-            { series.length > 0 &&
-                <> 
-                    <h2 className="series-title">Series</h2>
-                    { series.map((serie) => (
-                        <div className="list-item">{ serie.title }<span>▶️</span></div>
-                    )) }
-                </>
-            }
+        if(statusCode !== 200) {
+            return <Error  statusCode={ statusCode }/>
+        }
+
+        return <Layout title={ channel.title }>
+            <div className="hero"></div>
+            <PodcastsList audioClips={ audioClips }/>
 
             <style jsx>{`
-                header{
-                    color: #fff; 
-                    background: #8756CA; 
-                    padding: 15px; 
-                    text-align: center; 
-                }
-                h1 {
-                    font-weight: 600; 
-                    padding: 15px; 
-                    text-align: center; 
-                }
-                h2{
-                    padding: 5px; 
-                    font-size: 18px; 
-                    font-weight: 600; 
-                    margin: 0; 
-                    text-align: center; 
-                }
-                .list-item{
-                    padding: 10px;
-                    margin: 20px auto 0 auto; 
-                    background: #FFDFD3; 
-                    cursor: pointer; 
-                    max-width: 450px; 
-                    display: flex; 
-                    justify-content: space-between; 
-                }
-                .list-item:hover{
-                    -webkit-box-shadow: 5px 5px 8px -2px rgba(0,0,0,0.27);
-                    -moz-box-shadow: 5px 5px 8px -2px rgba(0,0,0,0.27);
-                    box-shadow: 5px 5px 8px -2px rgba(0,0,0,0.27);
-                }
-                .series-title{
-                    margin-top: 20px; 
-                }
-                img{
+                img {
                     max-width: 200px; 
                     display: block; 
                     margin: 0 auto 30px auto; 
                 }
-            `}</style>
-            <style jsx global>{`
-                body{
-                    margin: 0; 
-                    background: #fff; 
-                    font-family: system-ui;  
+                .hero {
+                    width: 100%; 
+                    height: 200px; 
+                    background-image: url(${channel.urls.banner_image.original});
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    background-size: cover; 
+                    margin-bottom: 20px;
                 }
             `}</style>
-        </>
+        </Layout>
     }
 }
