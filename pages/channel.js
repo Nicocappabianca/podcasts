@@ -1,6 +1,7 @@
 import Layout from '../components/Layout'
 import PodcastsList from '../components/PodcastsList'
 import Error from './_error'
+import PodcastPlayer from '../components/PodcastPlayer'
 
 export default class extends React.Component {
     
@@ -43,6 +44,13 @@ export default class extends React.Component {
             openClip: clip 
         })
     }
+
+    closeClip = (event) => {
+        event.preventDefault()
+        this.setState({
+            openClip: null
+        })
+    }
     
     render(){
         const { channel, audioClips, statusCode } = this.props
@@ -54,8 +62,12 @@ export default class extends React.Component {
 
         return <Layout title={ channel.title }>
             <div className="hero"></div>
-            { openClip && <div>Hay un podcast abierto</div> }
             <PodcastsList onClickClip={ this.openClip } audioClips={ audioClips }/>
+            { openClip &&
+                <div className="modal">
+                    <PodcastPlayer clip={ openClip } onClose={ this.closeClip } />
+                </div> 
+            }
 
             <style jsx>{`
                 img {
@@ -76,6 +88,16 @@ export default class extends React.Component {
                    .hero {
                        height: 350px; 
                     } 
+                }
+                .modal{
+                    position: fixed; 
+                    top: 0px; 
+                    right: 0px; 
+                    bottom: 0px; 
+                    top: 0px; 
+                    z-index: 99999; 
+                    width: 100%; 
+                    height: 100%; 
                 }
             `}</style>
         </Layout>

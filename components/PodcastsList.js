@@ -16,7 +16,7 @@ export default class PodcastsList extends React.Component {
                             <p>{ clip.title }</p>
                             <small>{ Math.ceil(clip.duration / 60) } min.</small>
                         </div>
-                        <span>▶️</span>
+                        <span>🔊</span>
                     </a>
                 )) }
                 
@@ -29,9 +29,10 @@ export default class PodcastsList extends React.Component {
                     text-align: center; 
                 }
                 .list-item{
+                    transition: .1s; 
                     padding: 10px;
                     margin: 20px auto 0 auto; 
-                    background: #fddb3a; 
+                    background: #ffe75e; 
                     cursor: pointer; 
                     max-width: 450px; 
                     display: flex; 
@@ -39,6 +40,7 @@ export default class PodcastsList extends React.Component {
                     border-radius: 5px; 
                     text-decoration: none; 
                     color: #000;
+                    font-weight: 600; 
                 }
                 .list-item p{
                     margin: 0; 
@@ -55,6 +57,16 @@ export default class PodcastsList extends React.Component {
                 }
                 small{
                     color: #52575d; 
+                }
+                @media (max-width: 767.9px){
+                    .list-item{
+                        max-width: 87%;
+                        margin-left: auto;
+                        margin-right: auto; 
+                    }
+                    .list-item:hover {
+                        max-width: 89%; 
+                    }
                 }
             `}</style>
             </div>
