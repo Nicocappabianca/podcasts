@@ -4,6 +4,11 @@ import Error from './_error'
 
 export default class extends React.Component {
     
+    constructor(props){
+        super(props)
+        this.state = { openClip: null }; 
+    }
+
     static async getInitialProps({ query, res }){
         let idChannel = query.id
 
@@ -31,9 +36,17 @@ export default class extends React.Component {
             return { channel: null, audioClips: null, statusCode: 503 }
         }
     }
+
+    openClip = (event, clip) => {
+        event.preventDefault(); 
+        this.setState({
+            openClip: clip 
+        })
+    }
     
     render(){
         const { channel, audioClips, statusCode } = this.props
+        const { openClip } = this.state
 
         if(statusCode !== 200) {
             return <Error  statusCode={ statusCode }/>
@@ -41,7 +54,8 @@ export default class extends React.Component {
 
         return <Layout title={ channel.title }>
             <div className="hero"></div>
-            <PodcastsList audioClips={ audioClips }/>
+            { openClip && <div>Hay un podcast abierto</div> }
+            <PodcastsList onClickClip={ this.openClip } audioClips={ audioClips }/>
 
             <style jsx>{`
                 img {
