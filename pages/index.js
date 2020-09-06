@@ -25,4 +25,4 @@ export default class extends React.Component{
             <ChannelGrid channels={ channels }/>
         </Layout>
     }
-} 
+}

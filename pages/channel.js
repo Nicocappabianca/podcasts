@@ -1,6 +1,6 @@
 import Layout from '../components/Layout'
 import PodcastsList from '../components/PodcastsList'
-import Error from 'next/error'
+import Error from './_error'
 
 export default class extends React.Component {
     
@@ -28,7 +28,6 @@ export default class extends React.Component {
     
             return { channel, audioClips, statusCode: 200 }
         } catch(e) {
-            res.statusCode = reqChannel.status; 
             return { channel: null, audioClips: null, statusCode: 503 }
         }
     }
@@ -58,6 +57,11 @@ export default class extends React.Component {
                     background-position: center;
                     background-size: cover; 
                     margin-bottom: 20px;
+                }
+                @media (min-width: 768px) {
+                   .hero {
+                       height: 350px; 
+                    } 
                 }
             `}</style>
         </Layout>
