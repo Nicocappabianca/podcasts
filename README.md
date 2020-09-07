@@ -4,6 +4,8 @@ Project from Next.js course integrated with AudioBoom API.
 
 ![app-screenshot](./.readme-static/screenshot-podcasts.jpg)
 
+[View live demo](https://podcasts-seven.vercel.app) :globe_with_meridians:
+
 ## How does it work? :hammer_and_wrench:
 
 Requiere Node.JS
@@ -13,7 +15,7 @@ Requiere Node.JS
 * `npm run build` to builds the production application. 
 * `npm start` to starts a Node.js server. 
 
-## License
+## License :balance_scale:
 MIT 
 
 ## Author :black_nib:
