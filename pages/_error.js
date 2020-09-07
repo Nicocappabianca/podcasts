@@ -6,13 +6,13 @@ function Error({ statusCode }) {
             <Layout title="Oh no!">
                 { statusCode === 404 ? 
                     <div className="message">
-                        <h1>Esta página no existe 😰</h1>
-                        <p><Link href="/"><a>← Volver al Inicio</a></Link></p>
+                        <h1>This page does not exist 😰</h1>
+                        <p><Link href="/"><a>← Back to Home</a></Link></p>
                     </div>
                     : 
                     <div className="message">
-                        <h1>Hubo un problema 😰</h1>
-                        <p>Intenta nuevamente en unos segundos.</p>
+                        <h1>There was a problem 😰</h1>
+                        <p>Please try again in a few seconds.</p>
                     </div>
                 }
 

@@ -8,7 +8,7 @@ export default class PodcastsList extends React.Component {
         return(
             <div className="podcasts">
 
-                <h2>Últimos podcasts</h2>
+                <h2>Latest podcasts</h2>
                 { audioClips.map((clip) => (
                     <a href={`/${slug(clip.channel.title)}.${clip.channel.id}/${slug(clip.title)}.${clip.id}`}
                     className='list-item' key={clip.id} onClick={ (event) => onClickClip(event, clip) }>
