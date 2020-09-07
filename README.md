@@ -17,4 +17,4 @@ Requiere Node.JS
 MIT 
 
 ## Author :black_nib:
-[Nicolás Cappabianca]: https://www.linkedin.com/in/nicolascappabianca/
+**Nicolás Cappabianca** - [LinkedIn](https://www.linkedin.com/in/nicolascappabianca/)
